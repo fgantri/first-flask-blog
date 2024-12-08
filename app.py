@@ -29,5 +29,20 @@ def delete(post_id):
     return redirect(url_for('index'))
 
 
+@app.route('/update/<uuid:post_id>', methods=['GET', 'POST'])
+def update(post_id):
+    post_to_update = None
+    for post in blog_posts:
+        if post["id"] == post_id:
+            post_to_update = post
+    if request.method == 'POST':
+        updated_post = dict(request.form)
+        updated_post["id"] = post_id
+        blog_posts.remove(post_to_update)
+        blog_posts.append(updated_post)
+        return redirect(url_for('index'))
+    return render_template('update.html', post=post_to_update)
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

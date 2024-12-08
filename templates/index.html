@@ -17,6 +17,7 @@
             <form action="/delete/{{ post['id'] }}" method="post">
                 <button type="submit">Delete</button>
             </form>
+            <a href="/update/{{ post['id'] }}">Update Post</a>
         </div>
     {% endfor %}
 </body>
