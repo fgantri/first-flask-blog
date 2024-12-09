@@ -39,6 +39,7 @@ def update(post_id):
     post_to_update = fetch_blog_post(post_id)
     if request.method == 'POST':
         updated_post = dict(request.form)
+        updated_post["likes"] = post_to_update["likes"]
         update_blog_post(post_id, updated_post)
         return redirect(url_for('index'))
     return render_template('update.html', post=post_to_update)
