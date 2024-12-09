@@ -1,3 +1,5 @@
+from crypt import methods
+
 from flask import Flask, request, redirect, url_for, render_template
 from uuid import uuid4 as gen_uuid
 from posts_storage import fetch_blog_posts, add_blog_post, delete_blog_post, update_blog_post, fetch_blog_post
@@ -17,6 +19,7 @@ def add():
     if request.method == 'POST':
         new_post = dict(request.form)
         new_post["id"] = str(gen_uuid())
+        new_post["likes"] = 0
         add_blog_post(new_post)
         return redirect(url_for('index'))
     return render_template('add.html')
@@ -39,6 +42,14 @@ def update(post_id):
         update_blog_post(post_id, updated_post)
         return redirect(url_for('index'))
     return render_template('update.html', post=post_to_update)
+
+
+@app.route('/like/<string:post_id>', methods=["POST"])
+def like(post_id):
+    post_to_update = fetch_blog_post(post_id)
+    post_to_update["likes"] += 1
+    update_blog_post(post_id, post_to_update)
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
